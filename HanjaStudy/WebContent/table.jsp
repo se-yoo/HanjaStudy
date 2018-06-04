@@ -139,8 +139,8 @@ span.hanja {
 					//과거
 					if (j == 4)
 						out.println("<td style='background-color:#ffe8ab;width:20%;'><span class='day'>"
-								+ tableDayCnt + "일차</span> 날짜 : " + day[i * 5 + j] + "<p>최고 점수 : "
-								+ score[(tableDayCnt / 5) - 1] + "</p><a href='game.jsp?DAY=" + tableDayCnt
+								+ tableDayCnt + "일차</span> 날짜 : " + day[i * 5 + j] + "<p>최고 점수 : <span style='color:#dd6d6d'>"
+								+ score[(tableDayCnt / 5) - 1] + "</span> / 1000</p><a href='game.jsp?DAY=" + tableDayCnt
 								+ "'><img src='resources/gameBt.png' height='20%'></a></td>");
 					else {
 						out.println("<td style='width:20%;'><span class='day'>" + tableDayCnt + "일차</span> 학습 날짜 : "
@@ -153,8 +153,8 @@ span.hanja {
 					//오늘
 					if (j == 4) {
 						out.println("<td style='background-color:#ffe8ab;width:20%;'><p><span class='day'>"
-								+ tableDayCnt + "일차</span> 최고점수 : " + score[(tableDayCnt / 5) - 1] + "</p>"
-								+ "<a href='game.jsp?DAY=" + tableDayCnt
+								+ tableDayCnt + "일차</span> 최고점수 : <span style='color:#dd6d6d'>" + score[(tableDayCnt / 5) - 1]
+								+ "</span> / 1000</p>"+ "<a href='game.jsp?DAY=" + tableDayCnt
 								+ "'><img src='resources/gameBt.png' height='30%'></a></td>");
 					} else {
 						out.println("<td style='width:20%;'><p><span class='day'>" + tableDayCnt

@@ -58,30 +58,36 @@ body {
 }
 
 #a1 {
+	width:443px;
 	color: white;
-	font-size: 3em;
+	font-size: 4em;
 	position: absolute;
 	float: left;
-	margin-left: 150px;
+	margin-left:0px;
 	top: 731px;
+	text-align:center;
 }
 
 #a2 {
+	width:443px;
 	color: white;
-	font-size: 3em;
+	font-size: 4em;
 	position: absolute;
 	float: left;
-	margin-left: 593px;
+	margin-left:443px;
 	top: 731px;
+	text-align:center;
 }
 
 #a3 {
+	width:443px;
 	color: white;
-	font-size: 3em;
+	font-size: 4em;
 	position: absolute;
 	float: left;
-	margin-left: 1036px;
+	margin-left:886px;
 	top: 731px;
+	text-align:center;
 }
 
 #character {
@@ -114,37 +120,103 @@ body {
 	var t = 5;
 	var qCnt = 10;
 	var score = 0;
+	var x=870;
+	var answer="";
+	var select="";
+	
 	window.onload = function() {
+		document.getElementById("question").innerHTML="시작";
 		document.getElementById("box1").style.display = "none";
 		document.getElementById("box2").style.display = "none";
 		document.getElementById("box3").style.display = "none";
-
+		
+		setInterval(back,10);
 		setInterval(timerCnt, 1000);
+	}
+	
+	window.onkeydown = function() {
+		  if(event.keyCode==37){//왼
+			  document.getElementById("character").innerHTML="<img src='resources/left.png'>";
+			  if(x>315){
+				  x-=20;
+				  document.getElementById("character").style.left=x+'px';
+			  }
+		  }else if(event.keyCode==39){
+			  document.getElementById("character").innerHTML="<img src='resources/right.png'>";
+			  if(x<1440){
+				  x+=20;
+				  document.getElementById("character").style.left=x+'px';
+			  }
+		  }
+	}
+	
+	window.onkeyup = function() {
+		document.getElementById("character").innerHTML="<img src='resources/character.png'>";
 	}
 
 	function timerCnt() {
 		t--;
 		document.getElementById("timer1").innerHTML = t;
 		document.getElementById("timer2").innerHTML = t;
+		b=["a1","a2","a3"];
 
-		if (t == 5)
-			document.getElementById("question").innerHTML = document
-					.getElementById("Q" + qCnt).value;
-
-		if ((qCnt > 0 || qCnt == 10) && t == 0) {
-			t = 6;
-			if (qCnt == 10) {
-				document.getElementById("timer1").innerHTML = "시";
-				document.getElementById("timer2").innerHTML = "작";
-			} else {
-				document.getElementById("timer1").innerHTML = "정";
-				document.getElementById("timer2").innerHTML = "답";
+		if (t == 5){
+			for(i=0;i<10;i++){
+				rand=Math.floor(Math.random()*3);
+				rand2=Math.floor(Math.random()*3);
+				tmp=b[rand];
+				b[rand]=b[rand2];
+				b[rand2]=tmp;
 			}
+			document.getElementById("question").innerHTML = document.getElementById("Q" + qCnt).value;
+			document.getElementById(b[0]).innerHTML = document.getElementById("i" + qCnt+"_1").value;
+			document.getElementById(b[1]).innerHTML = document.getElementById("i" + qCnt+"_2").value;
+			document.getElementById(b[2]).innerHTML = document.getElementById("i" + qCnt+"_3").value;
+			answer=document.getElementById("A"+qCnt).value;
+		}
 
+		if (qCnt == 10 && t==1) {
+			t = 6;
+			document.getElementById("timer1").innerHTML = "시";
+			document.getElementById("timer2").innerHTML = "작";
 			qCnt--;
 			document.getElementById("Qcnt").innerHTML = qCnt;
-		} else if (t == 0 && qCnt == 0) {
-			location.href = "gameEnd.jsp?SCORE=" + score;
+		} 
+		else if (qCnt > 0&& t == 1 && select==answer) {
+			t = 6;
+			document.getElementById("timer1").innerHTML = "정";
+			document.getElementById("timer2").innerHTML = "답";
+			score+=100;
+			document.getElementById("score").innerHTML = score;
+			qCnt--;
+			document.getElementById("Qcnt").innerHTML = qCnt;
+		}else if ((t == 1 && qCnt == 0)||(qCnt!=10 && select!=answer && t<=1)) {
+			document.getElementById("timer1").innerHTML = "종";
+			document.getElementById("timer2").innerHTML = "료";
+			//location.href = "gameEnd.jsp?s=" + score+"&d=";
+			if(qCnt==0 && select==answer)score+=100;
+			document.getElementById("s").value=score;
+			document.getElementById('end').submit();
+		}
+	}
+	
+	function back(){
+		center=x+84;
+		if(center>295&&center<733){
+			document.getElementById("box1").style.display = "block";
+			document.getElementById("box2").style.display = "none";
+			document.getElementById("box3").style.display = "none";
+			select=document.getElementById("a1").innerHTML;
+		}else if(center>732&&center<1170){
+			document.getElementById("box1").style.display = "none";
+			document.getElementById("box2").style.display = "block";
+			document.getElementById("box3").style.display = "none";
+			select=document.getElementById("a2").innerHTML;
+		}else{
+			document.getElementById("box1").style.display = "none";
+			document.getElementById("box2").style.display = "none";
+			document.getElementById("box3").style.display = "block";
+			select=document.getElementById("a3").innerHTML;
 		}
 	}
 </script>
@@ -173,6 +245,8 @@ body {
 					csvStr += tmpStr + "`";
 				}
 			} while (tmpStr != null);
+			
+			reader.close();
 			StringTokenizer parse = new StringTokenizer(csvStr, "`");
 			for (int i = 0; i < 20; i++) {
 				sajaQA[i] = parse.nextToken();
@@ -221,6 +295,7 @@ body {
 					question[i][0] = parse.nextToken();
 				}
 			}
+			reader.close();
 		} catch (Exception e) {
 			out.println("파일을 읽을 수 없습니다.");
 		}
@@ -324,10 +399,10 @@ body {
 		<p id="score">0</p>
 		<div id="timer1" class="timer">5</div>
 		<div id="timer2" class="timer">5</div>
-		<p id="question">시작</p>
+		<p id="question"></p>
 		<div id="a1" style="z-index: 2;"></div>
-		<div id="a2" style="z-index: 2;"></div>
-		<div id="a3" style="z-index: 2;"></div>
+		<div id="a2" style="z-index: 2;" ></div>
+		<div id="a3" style="z-index: 2;" ></div>
 		<div id="box1">
 			<img src="resources/first.JPG" width="443px" height="282px;">
 		</div>
@@ -341,5 +416,9 @@ body {
 			<img src="resources/character.png">
 		</div>
 	</div>
+	<form action="gameEnd.jsp" method="post" id="end">
+		<input type="hidden" id="s" name="s" value="0">
+		<input type="hidden" name="d" value="<%=a%>">
+	</form> 
 </body>
 </html>
